@@ -1,0 +1,7 @@
+*/node_modules/
+markov/slack-raw/
+markov/corpus.txt
+markov/king-james.txt
+markov/bible-corpus.txt
+markov/shakespeare.txt
+markov/shakespeare-corpus.txt
