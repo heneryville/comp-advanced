@@ -42,6 +42,7 @@ peopleHeat = {
     'mitchell': 2,
     'pia': 2,
     'gema': 2,
+    'daniel': 0,
 }
 
 # Each team has various tiers,
