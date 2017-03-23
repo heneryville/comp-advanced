@@ -19,7 +19,7 @@ max
 """
 
 def knapsack_continuous(materials, limit):
-  strengthLeft = 50;
+  strengthLeft = limit;
   take = []
   valueTaken = 0;
   valuePerPound = [ (materials[ind][1]/materials[ind][2],ind) for ind in range(len(materials)) ]
@@ -35,11 +35,5 @@ def knapsack_continuous(materials, limit):
     take.append( (material[0],lbsToTake, unitsToTake, value)  )
   return (valueTaken, take)
 
-print('Continuous Knapsack',knapsack_continuous(materials,50))
+#print('Continuous Knapsack',knapsack_continuous(materials,50))
 
-discrete_materials = [
-    #name, price per unit, unit weight, units available
-    ('tv',419,15.76,2), #https://www.amazon.com/TCL-40FS3800-40-Inch-1080p-Smart/dp/B00UB9UJFQ/ref=sr_1_1?s=tv&ie=UTF8&qid=1488476504&sr=1-1&keywords=flat+screen&refinements=p_n_size_browse-bin%3A3578041011
-    ('computer',719.99,12.34,3), # https://www.newegg.com/Product/Product.aspx?Item=N82E16883795360
-    ('dirt',1.79,40,1000), # http://www.homedepot.com/p/40-lb-Topsoil-71140180/100355705
-];
