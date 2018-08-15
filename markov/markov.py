@@ -1,6 +1,6 @@
 import random
 
-n = 4
+n = 3
 lookback = n -1
 ngrams = {}
 START = '<START>'
@@ -55,7 +55,10 @@ def train(corpus,strength):
                 learn(c,strength)
     print('Learned the corpus',corpus)
 
-#train('bible-corpus.txt',1)
+train('bible-corpus.txt',1)
+train('slack-corpus.txt',1)
+train('slack-corpus.txt',1)
+train('slack-corpus.txt',1)
 train('slack-corpus.txt',1)
 #train('shakespeare-corpus.txt',1)
 

@@ -1,5 +1,6 @@
 import fitness
 import random
+import itertools
 
 people = set(fitness.people)
 
@@ -33,6 +34,27 @@ def random_swap(config):
     config[seat2] = temp
     return config
 
+def all_swaps(config):
+    pairs = itertools.combinations(fitness.seats,2)
+    for i, j in pairs:
+        si = config[i]
+        sj = config[j]
+        if si == sj: continue
+        copy = config.copy()
+        copy[i] = sj
+        copy[j] = si
+        yield copy
+
+def hill_climb(best_config, best_fit):
+    while True:
+        swaps = list(all_swaps(best_config));
+        fit, i_config = max( (fitness.fitness(swaps[i]), i) for i in range(len(swaps )))
+        config = swaps[i_config]
+        if fit > best_fit:
+            best_fit = fit
+            best_config = config
+        else:  return [ best_config, best_fit ]
+
 def monte_carlo_search():
     bestConfig = {}
     bestFitness = -1
@@ -42,6 +64,7 @@ def monte_carlo_search():
         searches += 1
         sam = random_config()
         fit = fitness.fitness(sam)
+        sam, fit = hill_climb(sam, fit)
         if(fit > bestFitness):
             bestFitness = fit
             bestConfig = sam
@@ -51,9 +74,10 @@ def monte_carlo_search():
 
 def random_config():
     asgns = {}
-    peps = [ x for x in fitness.people ]
-    random.shuffle(peps)
-    return { i+1: peps[i] for i in range(len(peps))  }
+    peps = list(fitness.people)
+    seats = list(fitness.seats)
+    random.shuffle(seats)
+    return { seats[i]: (peps[i] if i < len(peps) else None)   for i in range(len(seats))  }
 
 def depth_search():
     bestConfig = {}
@@ -103,11 +127,13 @@ def findUnseatedEmployees(configuration):
 
 def printConfiguration(assignments):
     txt = ''
-    for x in range(6):
+    for x in range(5):
         base = x * 3
-        for s in range(base+1,base+4):
-            if s in assignments: txt += '[' + pad_center(assignments[s],10) + ']'
-            else: txt += ' [ ' + pad_center(str(s),10) + ' ]'
+        bottom = base if x > 0 else -1
+        for s in range(bottom+1,base+4):
+            if s in assignments: asgn = '[' + pad_center(assignments[s],10) + ']'
+            else: asgn = ' [ ' + pad_center(str(s),10) + ' ]'
+            txt += asgn
         txt += '\n'
     print(txt)
 
@@ -120,4 +146,41 @@ def pad_center(txt, desiredLength):
     return (' ' * leach) + txt + (' '*each)
 
 #greedy_search()
-depth_search()
+#depth_search()
+
+monte_carlo_search()
+
+"""
+
+[  mario  ][          ][          ]
+[francisco][ wuelber ][          ]
+[  rommel  ][ octavio ][  bruce  ]
+[   juan   ][  andres  ][ mitchell ]
+[christian][   jose   ][   luis   ]
+
+
+"""
+example = {
+    1: 'mario',
+    2: '',
+    3: '',
+    4: 'francisco',
+    5: 'wuelber',
+    6: '',
+    7: 'rommel',
+    8: 'octavio',
+    9: 'bruce',
+    10: 'juan',
+    11: 'andres',
+    12: 'mitchell',
+    13: 'christian',
+    14: 'jose',
+    15: 'luis',
+}
+
+print(fitness.fitness(example))
+example[4] = 'wuelber'
+example[10] = ''
+printConfiguration(example)
+print(fitness.fitness(example))
+#better, _ =  hill_climb(example, fitness.fitness(example))
